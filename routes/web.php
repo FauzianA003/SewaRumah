@@ -28,6 +28,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Fitur Sewa untuk Penyewa
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.my');
+
+    // --- KODE FINAL: RUTE KONFIRMASI TRANSFER BRI MANUAL ---
+    Route::patch('/my-bookings/{id}/confirm', [BookingController::class, 'confirmPayment'])->name('bookings.confirm');
+
     Route::post('/bookings/{id}/upload', [BookingController::class, 'uploadPayment'])->name('bookings.upload');
     Route::get('/booking-success', function () {
         return view('bookings.success');

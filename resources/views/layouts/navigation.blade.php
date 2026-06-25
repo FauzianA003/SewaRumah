@@ -1,146 +1,59 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
-                </div>
+<nav class="w-64 bg-white border-r border-slate-100 min-h-screen flex flex-col justify-between p-6">
+    <div class="space-y-8">
+        <!-- Logo Brand -->
+        <div class="flex items-center gap-3 px-2">
+            <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+            <span class="font-black text-slate-800 tracking-tight text-lg">SewaRumah</span>
+        </div>
 
-                <!-- Navigation Links (Desktop) -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+        <!-- Menu Navigasi Vertikal -->
+        <div class="flex flex-col gap-1.5">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">Main Menu</p>
 
-                    <x-nav-link :href="route('houses.index')" :active="request()->routeIs('houses.index')">
-                        {{ __('Beranda') }}
-                    </x-nav-link>
+            <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all {{ request()->routeIs('dashboard') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800' }}">
+                Dashboard
+            </a>
 
-                    <x-nav-link :href="route('bookings.my')" :active="request()->routeIs('bookings.my')">
-                        {{ __('Sewa Saya') }}
-                    </x-nav-link>
+            <a href="{{ url('/houses') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all {{ request()->is('houses*') && !request()->is('admin*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800' }}">
+                Beranda
+            </a>
 
-                    <!-- Menu Admin Desktop: Hanya jika sudah login DAN email sesuai -->
-                    @auth
-                        @if(Auth::user()->email === 'admin@gmail.com')
-                            <x-nav-link :href="route('admin.houses.create')" :active="request()->routeIs('admin.houses.create')">
-                                {{ __('+ Tambah Rumah') }}
-                            </x-nav-link>
+            <a href="{{ route('bookings.my') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all {{ request()->routeIs('bookings.my') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800' }}">
+                Sewa Saya
+            </a>
 
-                            <x-nav-link :href="route('bookings.index')" :active="request()->routeIs('bookings.index')">
-                                {{ __('Daftar Pesanan') }}
-                            </x-nav-link>
-                        @endif
-                    @endauth
+            <!-- Menu Khusus Admin -->
+            @if(Auth::user()->email === 'admin@gmail.com')
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2 mt-4 mb-2">Admin Panel</p>
 
-                    <!-- TAMBAHKAN LINK KONTAK DI SINI -->
-                    <x-nav-link :href="route('kontak')" :active="request()->routeIs('kontak')">
-                        {{ __('Kontak') }}
-                    </x-nav-link>
-                </div>
-            </div>
+                <a href="{{ route('admin.houses.create') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all {{ request()->routeIs('admin.houses.create') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800' }}">
+                    + Tambah Rumah
+                </a>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                @auth
-                    <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                <div>{{ Auth::user()->name }}</div>
-                                <div class="ms-1">
-                                    <svg class="fill-current h-4 w-4" xmlns="w3.org" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                            </button>
-                        </x-slot>
+                <a href="{{ route('bookings.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all {{ request()->routeIs('bookings.index') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800' }}">
+                    Daftar Pesanan
+                </a>
+            @endif
 
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
-
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                                    {{ __('Log Out') }}
-                                </x-dropdown-link>
-                            </form>
-                        </x-slot>
-                    </x-dropdown>
-                @endauth
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2 mt-4 mb-2">Support</p>
+            <a href="{{ route('kontak') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all {{ request()->routeIs('kontak') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800' }}">
+                Kontak
+            </a>
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu (Mobile/HP) -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-
-            <x-responsive-nav-link :href="route('houses.index')" :active="request()->routeIs('houses.index')">
-                {{ __('Beranda') }}
-            </x-responsive-nav-link>
-
-            <x-responsive-nav-link :href="route('bookings.my')" :active="request()->routeIs('bookings.my')">
-                {{ __('Sewa Saya') }}
-            </x-responsive-nav-link>
-
-            <x-responsive-nav-link :href="route('kontak')" :active="request()->routeIs('kontak')">
-                {{ __('Kontak') }}
-            </x-responsive-nav-link>
-
-            <!-- Menu Admin Mobile: Dibungkus @auth dan @endif dengan benar -->
-            @auth
-                @if(Auth::user()->email === 'admin@gmail.com')
-                    <x-responsive-nav-link :href="route('admin.houses.create')" :active="request()->routeIs('admin.houses.create')">
-                        {{ __('+ Tambah Rumah') }}
-                    </x-responsive-nav-link>
-
-                    <x-responsive-nav-link :href="route('bookings.index')" :active="request()->routeIs('bookings.index')">
-                        {{ __('Daftar Pesanan') }}
-                    </x-responsive-nav-link>
-                @endif
-            @endauth
+    <!-- Identitas Pengguna & Tombol Logout -->
+    <div class="border-t border-slate-100 pt-4 space-y-3">
+        <div class="px-2">
+            <p class="text-sm font-bold text-slate-800 truncate">{{ Auth::user()->name }}</p>
+            <p class="text-xs text-slate-400 truncate mt-0.5">{{ Auth::user()->email }}</p>
         </div>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            @auth
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-                </div>
-
-                <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.edit')">
-                        {{ __('Profile') }}
-                    </x-responsive-nav-link>
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
-                            {{ __('Log Out') }}
-                        </x-responsive-nav-link>
-                    </form>
-                </div>
-            @endauth
-        </div>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-rose-600 hover:bg-rose-50 transition-all">
+                Keluar Aplikasi
+            </button>
+        </form>
     </div>
 </nav>

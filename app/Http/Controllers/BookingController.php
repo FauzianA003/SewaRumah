@@ -125,4 +125,21 @@ class BookingController extends Controller
         // 5. Kembalikan ke halaman sukses
         return redirect()->route('bookings.my')->with('message', 'Pesanan Anda berhasil dikirim silahkan lakukan pembayaran.');
     }
+        /**
+     * KODE FINAL: Logika konfirmasi otomatis setelah klik tombol sudah transfer BRI.
+     * Mengubah status sewa dari 'pending' menjadi 'confirmed'.
+     */
+    public function confirmPayment($id)
+    {
+        // 1. Cari data sewa berdasarkan ID
+        $booking = Booking::findOrFail($id);
+
+        // 2. Ubah statusnya dari pending menjadi confirmed
+        $booking->status = 'confirmed';
+        $booking->save();
+
+        // 3. Kembalikan ke halaman riwayat sewa dengan pesan sukses
+        return redirect()->back()->with('success', 'Pembayaran via BRI berhasil dikonfirmasi!');
+    }
+
 }
