@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: sewa-rumah-app
+    env: php
+    plan: free
+    buildCommand: composer install --no-dev && npm install && npm run build
+    startCommand: php artisan serve --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_DEBUG
+        value: "false"
