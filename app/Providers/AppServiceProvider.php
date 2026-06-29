@@ -21,11 +21,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // 1. Ini kode Gate Anda (berdiri sendiri)
         Gate::define('access-admin', function ($user) {
             return $user->email === 'admin@gmail.com';
-            if (config('app.env') === 'production') {
-                URL::forceScheme('https');
-            }
         });
+
+        // 2. Ini kode paksa HTTPS (ditaruh di luar Gate, di bawahnya)
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
     }
 }
