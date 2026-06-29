@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/login');
 Route::get('/houses', [HouseController::class, 'index'])->name('houses.index');
 Route::get('/houses/{id}', [HouseController::class, 'show'])->name('houses.show');
-Route::get('/kontak', function () {
-    return view('kontak');
-})->name('kontak');
+
+// SOLUSI 1: Alihkan rute ke view via helper Route::view (ini aman dari cache error)
+Route::view('/kontak', 'kontak')->name('kontak');
 
 // --- AKSES USER LOGIN (Wajib Login) ---
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -29,27 +29,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('bookings.my');
 
-    // --- KODE FINAL: RUTE KONFIRMASI TRANSFER BRI MANUAL ---
+    // --- RUTE KONFIRMASI TRANSFER BRI MANUAL ---
     Route::patch('/my-bookings/{id}/confirm', [BookingController::class, 'confirmPayment'])->name('bookings.confirm');
-
     Route::post('/bookings/{id}/upload', [BookingController::class, 'uploadPayment'])->name('bookings.upload');
-    Route::get('/booking-success', function () {
-        return view('bookings.success');
-    })->name('bookings.success');
+
+    // SOLUSI 2: Alihkan rute ke view via helper Route::view (aman dari cache error)
+    Route::view('/booking-success', 'bookings.success')->name('bookings.success');
 
     // --- AKSES ADMIN (Manajemen Katalog & Pesanan) ---
-    Route::group(['middleware' => function ($request, $next) {
-        if ($request->user() && $request->user()->email === 'admin@gmail.com') {
-            return $next($request);
-        }
-        abort(403, 'Anda tidak memiliki akses ke halaman ini.');
-    }], function () {
+    // SOLUSI 3: Menggunakan 'can:' bawaan Laravel gate (Memeriksa email admin langsung tanpa closure)
+    Route::middleware(['can:access-admin'])->group(function () {
 
         // Manajemen Rumah (Katalog)
         Route::get('/admin/houses/create', [HouseController::class, 'create'])->name('admin.houses.create');
         Route::post('/admin/houses', [HouseController::class, 'store'])->name('admin.houses.store');
 
-        // --- RUTE EDIT & UPDATE YANG BARU DITAMBAHKAN ---
+        // --- RUTE EDIT & UPDATE ---
         Route::get('/admin/houses/{id}/edit', [HouseController::class, 'edit'])->name('admin.houses.edit');
         Route::put('/admin/houses/{id}', [HouseController::class, 'update'])->name('admin.houses.update');
         Route::delete('/admin/houses/{id}', [HouseController::class, 'destroy'])->name('admin.houses.destroy');
