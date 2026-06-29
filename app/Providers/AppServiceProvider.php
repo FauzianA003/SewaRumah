@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Gate::define('access-admin', function ($user) {
             return $user->email === 'admin@gmail.com';
+            if (config('app.env') === 'production') {
+                URL::forceScheme('https');
+            }
         });
     }
 }
