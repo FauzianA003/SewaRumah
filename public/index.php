@@ -1,18 +1,4 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| Re-route Putaran Cache untuk Serverless
-|--------------------------------------------------------------------------
-*/
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-// Paksa Laravel menulis view cache ke folder /tmp
-$viewPath = '/tmp/storage/framework/views';
-if (!is_dir($viewPath)) {
-    mkdir($viewPath, 0755, true);
-}
-config(['view.compiled' => $viewPath]);
 
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
